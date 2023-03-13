@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Блог сайта</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div th:insert="blocks/header :: header"></div>
+
+<div class="container mt-5 mb-5">
+    <h1>Добавление вопроса</h1>
+    <form action="/question/add" method="post" th:object="${question}">
+        <textarea name="full_text" th:field="*{questionText}" placeholder="Введите полный текст вопроса"
+                  class="form-control"></textarea><br>
+        <div th:each="answer,answerIndex : *{answers}">
+            <div class="form-group">
+                <label for="answer-text" th:text="'Ответ ' + ${answerIndex.index + 1}"></label>
+                <input type="text" class="form-control" id="answer-text"
+                       th:field="*{answers[__${answerIndex.index}__].answerText}"
+                       placeholder="Введите текст ответа">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="answer-isRight"
+                           th:field="*{answers[__${answerIndex.index}__].right}">
+                    <label class="form-check-label" for="answer-isRight">Правильный ответ</label>
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success">Добавить вопрос</button>
+    </form>
+
+</div>
+
+<div th:insert="blocks/footer :: footer"></div>
+</body>
+</html>
