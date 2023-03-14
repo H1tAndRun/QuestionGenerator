@@ -7,25 +7,21 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import org.thymeleaf.exceptions.TemplateInputException;
+
+import javax.validation.Valid;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 @Service
+@Validated
 public class QuestionService {
     @Value("${my.file.name}")
     private String fileName;
 
-    public void createQuestion(Question question) {
-        System.out.println(fileName);
-        try {
-            writeFile(question);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void writeFile(Question question) throws IOException {
+    public void writeQuestion(@Valid Question question) {
         StringBuilder builder = new StringBuilder(readFile());
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         final String LEFT_BRACKET = "[";
@@ -40,12 +36,18 @@ public class QuestionService {
                         gson.toJson(question) + RIGHT_BRACKET;
                 writer.write(writeString);
             }
+        } catch (IOException e) {
+            throw new RuntimeException();
         }
     }
 
-    private String readFile() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = mapper.readTree(new File(fileName));
-        return node.toPrettyString();
+    private String readFile() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode node = mapper.readTree(new File(fileName));
+            return node.toPrettyString();
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
     }
 }

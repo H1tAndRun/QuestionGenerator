@@ -10,7 +10,7 @@
 
 <div class="container mt-5 mb-5">
     <h1>Добавление вопроса</h1>
-    <form action="/question/add" method="post" th:object="${question}">
+    <form action="/questions/add" method="post" th:object="${question}">
         <textarea name="full_text" th:field="*{questionText}" placeholder="Введите полный текст вопроса"
                   class="form-control"></textarea><br>
         <div th:each="answer,answerIndex : *{answers}">

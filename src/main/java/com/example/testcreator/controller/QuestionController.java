@@ -8,10 +8,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.thymeleaf.exceptions.TemplateInputException;
+
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/question")
+@RequestMapping("/questions")
 public class QuestionController {
 
     private final QuestionService questionService;
@@ -24,8 +26,7 @@ public class QuestionController {
 
     @PostMapping("/add")
     public String questionAdd(Question question) {
-        System.out.println(question);
-        questionService.createQuestion(question);
-        return "redirect:/question/create";
+        questionService.writeQuestion(question);
+        return "redirect:/questions/create";
     }
 }
